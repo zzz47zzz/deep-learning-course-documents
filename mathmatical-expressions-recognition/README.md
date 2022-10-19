@@ -91,23 +91,26 @@ python3 labelImg.py
 每位同学会分配60张的试卷图片（预计标注时长1h），需要额外标注的同学联系助教拿额外60张试卷图片，其他标注问题在群里面问助教。
 
 1. 新建文件夹用于存放标注图片和对应的标签
-在自定义的路径下新建*input_images*和*labeled_images*两个空文件夹。把所分配的数学试题图片放入*input_images*中。*labeled_images*文件夹用于存放后续软件生成的每张图片的xml标签。**待标注完成后上交这两个文件夹**
-2. 修改类别标签文件*labelImg/data/predefined_classes.txt*，删去原来类别名称，输入math，保存退出。
-3. 在labelImg下，使用命令```python3 labelImg.py```打开标注软件（若在上一步中已经打开标注软件则跳过此步骤）
-4. 点击打开目录(Open Dir)，选择*input_images*文件夹
-5. 点击改变存放目录（Change Save Dir），选择*labeled_images*文件夹
-6. 点击Yolo/Pascal切换到PascalVOC模式。
+在自定义的路径下新建*input_images*和*output_annotations*两个空文件夹。把所分配的数学试题图片放入*input_images*中。*output_annotations*文件夹用于存放后续软件生成的每张图片的xml标签。**待标注完成后重命名并提交*output_annotations*文件夹压缩包**
+2. 在网址 http://202.38.247.12/ 下找到自己*点名册序号.zip*的图片压缩包下载，并把解压的图片放入*input_images*文件夹中。
+3. 修改类别标签文件*labelImg/data/predefined_classes.txt*，删去原来类别名称，输入math，保存退出。
+4. 在labelImg下，使用命令```python3 labelImg.py```打开标注软件（若在上一步中已经打开标注软件则跳过此步骤）
+5. 点击打开目录(Open Dir)，选择*input_images*文件夹
+6. 点击改变存放目录（Change Save Dir），选择*output_annotations*文件夹
+7. 点击Yolo/Pascal切换到PascalVOC模式。
 <div align="center">
 <img src="figs/3.png" width = "600"/>
 </div>
 
-7. 点击创建区块（快捷键w），圈出图片中的数学表达式（框选规则见下一节），选择标签选择math，按“OK”键完成一个框的标注。当完成当前图片所有框选后，使用快捷键ctrl+S保存，当前图片的标注将自动保存到*labeled_images*文件夹下。之后点击下一张图片（下一张图片快捷键d，上一张图片快捷键a），重复以上过程直到完成预定数量的标注。
-注：检查*labeled_images*文件下是否生成同名的xml标注文件
+8. 点击创建区块（快捷键w），圈出图片中的数学表达式（框选规则见下一节），选择标签选择math，按“OK”键完成一个框的标注。当完成当前图片所有框选后，使用快捷键ctrl+S保存，当前图片的标注将自动保存到*output_annotations*文件夹下。之后点击下一张图片（下一张图片快捷键d，上一张图片快捷键a），重复以上过程直到完成预定数量的标注。
+注：检查*output_annotations*文件下是否生成同名的xml标注文件
 <div align="center">
 <img src="figs/10.jpg" width = "600"/>
 </div>
 
-8. 提升效率小技巧：（1）熟练使用快捷键w和d；（2）在软件右上角勾选使用预设标签
+注：提升效率小技巧：（1）熟练使用快捷键w和d；（2）在软件右上角勾选使用预设标签
+
+9. 重命名*output_annotations*文件夹为*点名册序号_姓名*，压缩并在提交到指定网址 https://workspace.jianguoyun.com/inbox/collect/5f99cc9da86147c08b50bbae45e1e432/submitv2 。
 
 ### 2.4 框选数学表达式规则：
 
