@@ -34,24 +34,24 @@
 
 1. 熟悉并使用labelImg软件提取公式图片。本次实验会提供**真实的初高中数学试卷**作为数据源给每位同学，每位同学负责其中一部分图片的**公式框选**。（步骤一）
 2. 待每位同学完成后，将会收集同学们框选的标注，通过[mathpix](https://mathpix.com/)识别后，**取mathpix的识别结果作为ground truth**，再发回给大家作为数据集来训练。（步骤二）
-3. 利用所提供的代码，完成数据的**清洗+预处理**工作，以便作为模型的输入。（步骤三）
-4. 训练**两个模型**：（步骤四）
-    - Encoder用CNN，Decoder用RNN
-    - Encoder用Resnet，Decoder用[Transformer](https://arxiv.org/abs/1706.03762)
-5. 准备**小组答辩**，同时提交**实验报告**和**源代码**。（步骤五）
+3. 下载获取数据集（步骤三）
+4. 利用所提供的代码，完成数据的**清洗+预处理**工作，以便作为模型的输入。（步骤四）
+5. 训练**两个模型**：（步骤五）
+    - 模型1：Encoder用CNN，Decoder用RNN
+    - 模型2：Encoder用Resnet，Decoder用[Transformer](https://arxiv.org/abs/1706.03762)
+6. 提交模型测试集预测结果，获取测试集成绩（步骤六）
+7. 准备**小组答辩**，同时提交**实验报告**和**源代码**。（步骤七）
 
 
 ### 1.5 评分标准（项目总体分值为100分）
 
 1. 数据标注（40分）：**高质量完成**对应标注任务即可得到该部分分数的85%，**额外标注一份**即可得到得到该部分分数的100%。注：若标注质量低则酌情扣分。
 2. 模型实现（50分，**结合答辩环节评估**）：
-   - 模型正确性（30分）：CNN+RNN（15分）和 Resnet+Transformer（15分）。评分根据参考代码实现是否正确、实验结果评测指标、代码可复
-现性和注释等方面来考虑。
+   - 模型正确性（30分）：模型1 CNN+RNN（15分）和 模型2 Resnet+Transformer（15分）。评分根据参考代码实现是否正确、实验结果评测指标、代码可复现性和注释等方面来考虑。
    - 模型拓展性（20分）：优化模型、优化数据预处理、讨论任务瓶颈等。有UI的根据UI的美观、实用性等方面酌情加分。
 3. 实验报告（10分）：材料完整性，命名规范性，书写美观性等等。
 
 **注：若发现代码，模型，结果，实验报告有抄袭或伪造情况，则扣除相应部分的分数！**
-
 
 
 ## 二，步骤一：标注数据
@@ -138,12 +138,28 @@ python3 labelImg.py
 ## 三，步骤二：利用mathpix生成标注图片对应的公式
 此步无需同学们完成。
 
+## 四，步骤三：获取数据集
+在网址 http://202.38.247.12/ 下载数据集，由于数据集未正式公开，目前仅用作课程作业，请勿传播。
+格式和说明如下：
+```
+.
+└── datasets
+    ├── train           # 训练集：用于模型训练
+    |   ├── images      # 训练集图片
+    |   └── labels      # 训练集标签
+    ├── dev             # 验证集：用于调试参数
+    |    ├── images     # 验证集图片
+    |    └── labels     # 验证集标签
+    ├── test            # 测试集：用于检验模型泛化能力
+    |    └── images     # 测试集图片
+    ├── train_ids.txt   # 训练集的图片，标签名称(id)
+    ├── dev_ids.txt     # 验证集的图片，标签名称(id)
+    └── test_ids.txt    # 测试集的图片，标签名称(id)
+```
 
+## 五，步骤四：数据预处理（data_preprocess文件夹）
 
-## 四，步骤三：数据预处理（data_preprocess文件夹）
-
-
-### 4.1 项目文件功能
+### 5.1 项目文件功能
 ```
 .
 ├── data_filter.py # 过滤多行和内容为error mathpix的标签
@@ -157,7 +173,7 @@ python3 labelImg.py
 ```
 
 
-### 4.2 预处理思路 
+### 5.2 预处理思路 
 1. Tokenization，根据词表进行分词，并根据词表初步过滤数据
 2. 过滤多行数据和error mathpix
 3. 对齐过滤后的数据
@@ -165,27 +181,34 @@ python3 labelImg.py
 5. 根据神经网络模型的需要，看是否需要padding，padding到什么size
 
 
-## 五，步骤四：训练和评估模型
+## 六，步骤五：训练和评估模型
 
-- Encoder用CNN，Decoder用RNN：[参考GitHub地址](https://github.com/LinXueyuanStdio/LaTeX_OCR_PRO)。另外，近年来通过在Encoder和Decoder之间添加注意力机制能大大提升模型的效果，参考[https://arxiv.org/abs/1609.04938v1](https://arxiv.org/abs/1609.04938v1)，若添加有注意力与无注意力的对比分析可酌情加分。
-- Encoder用Resnet，Decoder用[Transformer](https://arxiv.org/abs/1706.03762)：[参考GitHub地址](https://github.com/kingyiusuen/image-to-latex)。
+- 模型1：Encoder用CNN，Decoder用RNN：[参考GitHub地址](https://github.com/LinXueyuanStdio/LaTeX_OCR_PRO)。另外，近年来通过在Encoder和Decoder之间添加注意力机制能大大提升模型的效果，参考[https://arxiv.org/abs/1609.04938v1](https://arxiv.org/abs/1609.04938v1)，若添加有注意力与无注意力的对比分析可酌情加分。
+- 模型2：Encoder用Resnet，Decoder用[Transformer](https://arxiv.org/abs/1706.03762)：[参考GitHub地址](https://github.com/kingyiusuen/image-to-latex)。
 
 
-## 六，步骤五：测试模型
+## 七，步骤六：测试模型
 
-### 6.1 评估概述
+### 7.1 评估概述
 - 是否必须：非强制，是否测试及测试成绩会作为打分参考
 - 开放时段：11月18日~11月24日
-- 提交内容：提交**一个TXT格式文件**包含模型在测试集上的预测结果（描述格式见6.3）
-- 提交形式：坚果云链接
-- 评价指标：BLEU Score, Edit Distance Score
+- 提交限制：每组每种模型两阶段**各一次**
+- 提交形式：坚果云链接（见6.2）
+- 提交内容：提交**一个TXT格式文件**包含模型在测试集上的预测结果（见6.3）
+- 评价指标：BLEU Score, Edit Distance Score（见6.4）
 - 测试结果：测试结果和排名将会**在每一阶段提交结束后次日公布**
+- 注意事项：
+  1. 只交一个TXT文件！
+  2. 顺序不要错，一定要和test_ids.txt的顺序一一对应！
+  3. 同组同模型重复提交会覆盖！
+  4. 预测TXT文件严禁传播！
+  5. 各组妥善保存对应模型参数以备查验！
 
-### 6.2 两阶段测试
+### 7.2 两阶段测试
 - 第一阶段测试：11月18日00:00:00开放提交，11月20日23:59:59停止提交。提交链接：https://workspace.jianguoyun.com/inbox/collect/2b794216f3e54dc68b4f54a7358b2f2e/submitv2
 - 第二阶段测试：11月22日00:00:00开放提交，11月24日23:59:59停止提交。提交链接：https://workspace.jianguoyun.com/inbox/collect/f5a21832a8824e209bb83db81085ca4a/submitv2
 
-### 6.3 提交内容（一个TXT格式文件）
+### 7.3 提交内容（一个TXT格式文件）
 数据集目录下的test_ids.txt中包含了测试集的图片id，每一行为一张测试图片的id（即测试集中名称为{id}.jpg或{id}.png的图片）。
 所需提交的TXT文件中，每一行表示test_ids.txt相应行对应测试图片的预测结果。
 一个提交示例如图：
@@ -193,22 +216,17 @@ python3 labelImg.py
 <img src="figs/11.jpg" width = "600"/>
 </div>
 
-### 6.4 注意事项：
-1. 只交一个TXT文件！
-2. 顺序不要错，一定要和test_ids.txt的顺序一一对应！
-3. 同组同模型重复提交会覆盖！f
-
-### 6.5 评价指标：
-1. BLEU Score
+### 7.4 评价指标：
+1. BLEU Score (0~100; larger is better)
 ```
 from nltk.translate.bleu_score import sentence_bleu
 bleu_score = 0.0
 for i,j in zip(references,hypotheses):
     bleu_score += max(sentence_bleu([i],j),0.01)
-bleu_score = bleu_score/len(references)
+bleu_score = bleu_score/len(references)*100
 ```
 
-2. Edit Distance Score
+2. Edit Distance Score (0~100; larger is better)
 ```
 def edit_distance(references, hypotheses):
     """Computes Levenshtein distance between two sequences.
@@ -223,21 +241,20 @@ def edit_distance(references, hypotheses):
         d_leven += distance.levenshtein(ref, hypo)
         len_tot += float(max(len(ref), len(hypo)))
 
-    return 1. - d_leven / len_tot
+    return (1. - d_leven/len_tot)*100
 ```
 
-## 七，步骤六：准备答辩和提交材料
+## 八，步骤七：准备答辩和提交材料
 
-### 7.1 答辩
+### 8.1 答辩
 - 时间：11月26日
-- 地点：XX
-- 形式：线下
+- 地点：待定
 - 时长：约5分钟
 - 准备：PPT，实验报告，源代码等辅助材料
 
-
-### 7.2 提交材料
+### 8.2 提交材料
 - 截止时间：待定
+- 提交形式：待定
 - 提交格式：每位同学一个压缩包**序号_姓名.zip**，结构如下
 ```
 .
@@ -246,5 +263,4 @@ def edit_distance(references, hypotheses):
     ├── 源代码（可选；提交个人负责部分的代码）# 文件夹/.zip
     └── 其他（可选；实验报告里面涉及的辅助材料） # 文件夹/.zip
 ```
-- 提交形式：坚果云
 - 其他注意事项：不要交训练数据，实验报告里明确分工，不要只粘贴代码，有问题在群里或者私聊问助教或者线下问老师
