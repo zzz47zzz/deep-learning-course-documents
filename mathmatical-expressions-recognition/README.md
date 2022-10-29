@@ -165,31 +165,86 @@ python3 labelImg.py
 5. 根据神经网络模型的需要，看是否需要padding，padding到什么size
 
 
-## 五，步骤四：训练和测试评估模型
+## 五，步骤四：训练和评估模型
 
 - Encoder用CNN，Decoder用RNN：[参考GitHub地址](https://github.com/LinXueyuanStdio/LaTeX_OCR_PRO)。另外，近年来通过在Encoder和Decoder之间添加注意力机制能大大提升模型的效果，参考[https://arxiv.org/abs/1609.04938v1](https://arxiv.org/abs/1609.04938v1)，若添加有注意力与无注意力的对比分析可酌情加分。
 - Encoder用Resnet，Decoder用[Transformer](https://arxiv.org/abs/1706.03762)：[参考GitHub地址](https://github.com/kingyiusuen/image-to-latex)。
 
 
-## 六，步骤五：准备答辩和提交材料
+## 六，步骤五：测试模型
 
-### 6.1 答辩
+### 6.1 评估概述
+- 是否必须：非强制，是否测试及测试成绩会作为打分参考
+- 开放时段：11月18日~11月24日
+- 提交内容：提交**一个TXT格式文件**包含模型在测试集上的预测结果（描述格式见6.3）
+- 提交形式：坚果云链接
+- 评价指标：BLEU Score, Edit Distance Score
+- 测试结果：测试结果和排名将会**在每一阶段提交结束后次日公布**
+
+### 6.2 两阶段测试
+- 第一阶段测试：11月18日00:00:00开放提交，11月20日23:59:59停止提交。提交链接：https://workspace.jianguoyun.com/inbox/collect/2b794216f3e54dc68b4f54a7358b2f2e/submitv2
+- 第二阶段测试：11月22日00:00:00开放提交，11月24日23:59:59停止提交。提交链接：https://workspace.jianguoyun.com/inbox/collect/f5a21832a8824e209bb83db81085ca4a/submitv2
+
+### 6.3 提交内容（一个TXT格式文件）
+数据集目录下的test_ids.txt中包含了测试集的图片id，每一行为一张测试图片的id（即测试集中名称为{id}.jpg或{id}.png的图片）。
+所需提交的TXT文件中，每一行表示test_ids.txt相应行对应测试图片的预测结果。
+一个提交示例如图：
+<div align="center">
+<img src="figs/11.jpg" width = "600"/>
+</div>
+
+### 6.4 注意事项：
+1. 只交一个TXT文件！
+2. 顺序不要错，一定要和test_ids.txt的顺序一一对应！
+3. 同组同模型重复提交会覆盖！f
+
+### 6.5 评价指标：
+1. BLEU Score
+```
+from nltk.translate.bleu_score import sentence_bleu
+bleu_score = 0.0
+for i,j in zip(references,hypotheses):
+    bleu_score += max(sentence_bleu([i],j),0.01)
+bleu_score = bleu_score/len(references)
+```
+
+2. Edit Distance Score
+```
+def edit_distance(references, hypotheses):
+    """Computes Levenshtein distance between two sequences.
+    Args:
+        references: list of sentences (one hypothesis)
+        hypotheses: list of sentences (one hypothesis)
+    Returns:
+        1 - levenshtein distance: (higher is better, 1 is perfect)
+    """
+    d_leven, len_tot = 0, 0
+    for ref, hypo in zip(references, hypotheses):
+        d_leven += distance.levenshtein(ref, hypo)
+        len_tot += float(max(len(ref), len(hypo)))
+
+    return 1. - d_leven / len_tot
+```
+
+## 七，步骤六：准备答辩和提交材料
+
+### 7.1 答辩
 - 时间：11月26日
 - 地点：XX
 - 形式：线下
-- 时长：待定
+- 时长：约5分钟
 - 准备：PPT，实验报告，源代码等辅助材料
 
 
-### 6.2 提交材料
+### 7.2 提交材料
 - 截止时间：待定
 - 提交格式：每位同学一个压缩包**序号_姓名.zip**，结构如下
 ```
 .
 └── 序号_姓名文件夹
     ├── 实验报告 # .docx/.doc/.pdf
-    ├── 源代码 # 文件夹/.zip
-    └── 其他（可选，实验报告里面涉及的辅助材料） # 文件夹/.zip
+    ├── 源代码（可选；提交个人负责部分的代码）# 文件夹/.zip
+    └── 其他（可选；实验报告里面涉及的辅助材料） # 文件夹/.zip
 ```
-- 提交形式：学委收齐，以QQ（备选邮箱）的方式发给助教
+- 提交形式：坚果云
 - 其他注意事项：不要交训练数据，实验报告里明确分工，不要只粘贴代码，有问题在群里或者私聊问助教或者线下问老师
