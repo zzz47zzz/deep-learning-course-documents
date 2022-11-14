@@ -194,8 +194,8 @@ python3 labelImg.py
 - 开放时段：11月18日~11月24日
 - 提交限制：每组每种模型两阶段**各一次**
 - 提交形式：坚果云链接（见6.2）
-- 提交内容：提交**一个TXT格式文件**包含模型在测试集上的预测结果（见6.3）
-- 评价指标：BLEU Score, Edit Distance Score（见6.4）
+- 提交内容：提交**一个TXT格式文件**包含模型在测试集上的预测结果（见7.3）
+- 评价指标：BLEU Score, Edit Distance Score, Exact Match Score（见7.4）
 - 测试结果：测试结果和排名将会**在每一阶段提交结束后次日公布**
 - 注意事项：
   1. 只交一个TXT文件！
@@ -205,6 +205,14 @@ python3 labelImg.py
   5. 各组妥善保存对应模型参数以备查验！
 
 ### 7.2 两阶段测试
+
+在同一阶段测试的开放时间内，可以多次在坚果云链接上提交，不过后一次会覆盖前一次的预测TXT，只以最后一次为准。
+
+两阶段测试的成绩是**继承**的，同一个组的同一个模型以最后一次提交的结果为排名依据。
+比如，第一阶段测试成绩理想，可以不用在第二阶段提交，第二阶段公布成绩是会自动使用第一次提交的结果。
+
+答辩时，老师看到的成绩以第二阶段测试结果为准。
+
 - 第一阶段测试：11月18日00:00:00开放提交，11月20日23:59:59停止提交。提交链接：https://workspace.jianguoyun.com/inbox/collect/2b794216f3e54dc68b4f54a7358b2f2e/submitv2
 - 第二阶段测试：11月22日00:00:00开放提交，11月24日23:59:59停止提交。提交链接：https://workspace.jianguoyun.com/inbox/collect/f5a21832a8824e209bb83db81085ca4a/submitv2
 
@@ -217,6 +225,7 @@ python3 labelImg.py
 </div>
 
 ### 7.4 评价指标：
+
 1. BLEU Score (0~100; larger is better)
 ```
 from nltk.translate.bleu_score import sentence_bleu
@@ -244,11 +253,24 @@ def edit_distance(references, hypotheses):
     return (1. - d_leven/len_tot)*100
 ```
 
+3. Exact Match Score (0~100; larger is better)
+每个样本完全匹配才算正确，计算公式如下
+```
+Exact Match Score=Accuracy*100
+```
+
+4. Overall Score (0~100; larger is better)
+总体分数，指标1，2，3的均值，最后排名的依据
+```
+Overall Score = (BLEU Score + Edit Distance Score + Exact Match Score) / 3
+```
+
 ## 八，步骤七：准备答辩和提交材料
 
 ### 8.1 答辩
-- 时间：11月26日
-- 地点：待定
+- 日期：11月26日（第13周周六上午）
+- 时间：待定
+- 地点：大学城校区A1-106,A1-107
 - 时长：约5分钟
 - 准备：PPT，实验报告，源代码等辅助材料
 
