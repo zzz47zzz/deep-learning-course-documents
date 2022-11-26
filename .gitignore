@@ -1,4 +1,5 @@
 images/*
 *.out
-mathmatical-expressions-recognition/evaluation/*
+mathmatical-expressions-recognition/evaluation/submit_results*
+mathmatical-expressions-recognition/evaluation/evaluate_summary*
 mathmatical-expressions-recognition/submit_results/*
